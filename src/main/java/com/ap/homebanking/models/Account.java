@@ -2,10 +2,12 @@ package com.ap.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.ManyToAny;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -16,15 +18,18 @@ public class Account {
     private int id;
     private String number;
     private LocalDate creationDate;
-    private long balance;
+    private double balance;
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    Set<Transaction> transactions = new HashSet<>();
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="client_id")
     private Client client;
 
+
     public Account() {
     }
 
-    public Account(String number, LocalDate creationDate, long balance) {
+    public Account(String number, LocalDate creationDate, double balance) {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
@@ -50,13 +55,18 @@ public class Account {
         this.creationDate = creationDate;
     }
 
-    public long getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
+
+
+
+
+
 
     @JsonIgnore
     public Client getClient() {
@@ -65,5 +75,18 @@ public class Account {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+
+
+
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void addTransactions(Transaction transaction) {
+        transaction.setAccount(this);
+        transactions.add(transaction);
     }
 }

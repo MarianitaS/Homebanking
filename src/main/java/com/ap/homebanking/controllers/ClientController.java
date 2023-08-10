@@ -26,10 +26,6 @@ public class ClientController {
     @RequestMapping("/clients/{id}")
     public ClientDto getClient(@PathVariable Integer id){
         return clientRepositiry.findById(id).map(ClientDto::new).orElse(null);
-
-
-
-
     }
 
 

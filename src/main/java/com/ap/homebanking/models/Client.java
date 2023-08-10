@@ -45,7 +45,6 @@ public class Client {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -58,11 +57,15 @@ public class Client {
         this.email = email;
     }
 
+
+
+
+
     public Set<Account> getAccounts() {
         return accounts;
     }
 
-    public void addAcount(Account account) {
+    public void addAccount(Account account) {
         account.setClient(this);
         accounts.add(account);
     }

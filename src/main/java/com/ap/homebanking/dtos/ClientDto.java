@@ -12,7 +12,7 @@ public class ClientDto {
     private String firstName;
     private String   lastName;
     private String    email;
-    private Set<Account> account;
+    private Set<Account> accounts;
 
     public ClientDto() {
     }
@@ -22,7 +22,7 @@ public class ClientDto {
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
-        this.account = client.getAccounts();
+        this.accounts = client.getAccounts();
     }
 
     public int getId() {
@@ -38,7 +38,7 @@ public class ClientDto {
         return email;
     }
     public Set<Account> getAccount() {
-        return account;
+        return accounts;
     }
 
 
