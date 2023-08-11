@@ -11,7 +11,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int id;
+    private long id;
     private TransactionType type;
     private double amount;
     private String description;
@@ -21,9 +21,11 @@ public class Transaction {
     @JoinColumn(name="account_id")
     private Account account;
 
+
+
+
     public Transaction() {
     }
-
     public Transaction(TransactionType type, double amount, String description, LocalDateTime date) {
         this.type = type;
         this.amount = amount;
@@ -31,7 +33,7 @@ public class Transaction {
         this.date = date;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public TransactionType getType() {

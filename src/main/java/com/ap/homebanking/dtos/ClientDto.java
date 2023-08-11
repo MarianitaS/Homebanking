@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ClientDto {
 
-    private int id;
+    private long id;
 
     private String firstName;
     private String   lastName;
@@ -25,7 +25,7 @@ public class ClientDto {
         this.accounts = client.getAccounts();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public String getFirstName() {

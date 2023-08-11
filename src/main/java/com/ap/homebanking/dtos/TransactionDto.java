@@ -1,11 +1,13 @@
 package com.ap.homebanking.dtos;
 
+import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.models.TransactionType;
+
 
 import java.time.LocalDateTime;
 
 public class TransactionDto {
-    private int id;
+    private long id;
     private TransactionType type;
     private double amount;
     private String description;
@@ -14,15 +16,15 @@ public class TransactionDto {
     public TransactionDto() {
     }
 
-    public TransactionDto(int id, TransactionType type, double amount, String description, LocalDateTime date) {
-        this.id = id;
-        this.type = type;
-        this.amount = amount;
-        this.description = description;
-        this.date = date;
+    public TransactionDto(Transaction transaction) {
+        this.id = transaction.getId();
+        this.type = transaction.getType();
+        this.amount = transaction.getAmount();
+        this.description = transaction.getDescription();
+        this.date = transaction.getDate();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -12,7 +12,7 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int id;
+    private long id;
 
     private String firstName;
     private String lastName;
@@ -30,7 +30,7 @@ public class Client {
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class AccountDto {
 
-    private int id;
+    private long id;
     private String number;
     private LocalDate creationDate;
     private double balance;
@@ -26,7 +26,7 @@ public class AccountDto {
         this.transactions = account.getTransactions();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public String getNumber() {
