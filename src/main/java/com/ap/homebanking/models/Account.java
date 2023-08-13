@@ -28,7 +28,6 @@ public class Account {
 
     public Account() {
     }
-
     public Account(String number, LocalDate creationDate, double balance) {
         this.number = number;
         this.creationDate = creationDate;
@@ -63,11 +62,6 @@ public class Account {
         this.balance = balance;
     }
 
-
-
-
-
-
     @JsonIgnore
     public Client getClient() {
         return client;
@@ -76,10 +70,6 @@ public class Account {
     public void setClient(Client client) {
         this.client = client;
     }
-
-
-
-
 
     public Set<Transaction> getTransactions() {
         return transactions;

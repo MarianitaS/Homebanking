@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 @Entity
 public class Transaction {
     @Id
@@ -16,12 +17,9 @@ public class Transaction {
     private double amount;
     private String description;
     private LocalDateTime date;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="account_id")
     private Account account;
-
-
 
 
     public Transaction() {
@@ -36,6 +34,7 @@ public class Transaction {
     public long getId() {
         return id;
     }
+
     public TransactionType getType() {
         return type;
     }
@@ -67,10 +66,6 @@ public class Transaction {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
-
-
-
-
 
     @JsonIgnore
     public Account getAccount() {

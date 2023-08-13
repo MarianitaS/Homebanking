@@ -3,10 +3,10 @@ package com.ap.homebanking.dtos;
 import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.models.TransactionType;
 
-
 import java.time.LocalDateTime;
 
 public class TransactionDto {
+
     private long id;
     private TransactionType type;
     private double amount;

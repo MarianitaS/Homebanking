@@ -1,29 +1,33 @@
 package com.ap.homebanking.models;
 
+import com.ap.homebanking.dtos.AccountDto;
+import com.ap.homebanking.dtos.ClientDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
+
 
 @Entity
 public class Client {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-
     private String firstName;
     private String lastName;
     private String email;
-
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    Set<ClientLoan> clientLoans = new HashSet<>();
 
     public Client() {
     }
-
     public Client(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,10 +61,6 @@ public class Client {
         this.email = email;
     }
 
-
-
-
-
     public Set<Account> getAccounts() {
         return accounts;
     }
@@ -69,4 +69,23 @@ public class Client {
         account.setClient(this);
         accounts.add(account);
     }
+
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void addClientLoans(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+    public void addLoans(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+    public List<Loan> getLoans(){
+        return clientLoans.stream().map(cli -> cli.getLoan()).collect(toList());
+    }
+
+
+
 }
