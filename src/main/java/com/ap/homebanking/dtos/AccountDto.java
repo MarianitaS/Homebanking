@@ -44,7 +44,7 @@ public class AccountDto {
         return balance;
     }
 
-    public Set<TransactionDto> getTransaction() {
+    public Set<TransactionDto> getTransactions() {
         return transactions.stream().map(transaction -> new TransactionDto(transaction)).collect(toSet());
     }
 

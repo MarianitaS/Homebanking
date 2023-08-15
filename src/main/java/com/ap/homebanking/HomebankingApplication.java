@@ -23,7 +23,8 @@ public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 								   AccountRepository accountRepository,
 								   TransactionRepository transactionRepository,
 								   LoanRepository loanRepository,
-								   ClientLoanRepository clientLoanRepository){
+								   ClientLoanRepository clientLoanRepository,
+								   CardRepository cardRepository){
 	return( args -> {
 		Client client1 = new Client(
 				"Melba",
@@ -136,13 +137,49 @@ public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 				List.of(6, 12, 24, 36)
 		);
 		ClientLoan clientLoan1 = new ClientLoan(400000,
-												60);
+												60
+		);
 		ClientLoan clientLoan2 = new ClientLoan(500000,
-												12);
+												12
+		);
 		ClientLoan clientLoan3 = new ClientLoan(100000,
-												24);
+												24
+		);
 		ClientLoan clientLoan4 = new ClientLoan(200000,
-												36);
+												36
+		);
+
+		LocalDate anio0 = LocalDate.now();
+		LocalDate futuro = anio0.plusYears(5);
+
+		Card card1 = new Card(
+				CardType.DEBIT,
+				CardColor.GOLD,
+				"5327-2870-5034-4325",
+				824,
+				futuro,
+				anio0
+		);
+		Card card2 = new Card(
+				CardType.CREDIT,
+				CardColor.TITANIUM,
+				"4211-4571-0419-9871",
+				466,
+				futuro,
+				anio0
+		);
+		Card card3 = new Card(
+				CardType.CREDIT,
+				CardColor.SILVER,
+				"4078-7990-4668-1504",
+				113,
+				futuro,
+				anio0
+		);
+
+
+
+
 
 		loan1.addClientLoans(clientLoan1);
 		loan2.addClientLoans(clientLoan2);
@@ -174,6 +211,10 @@ public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 		client2.addAccount(account3);
 		client2.addAccount(account4);
 
+		client1.addCards(card1);
+		client1.addCards(card2);
+		client2.addCards(card3);
+
 
 		clientRepositiry.save(client1);
 		clientRepositiry.save(client2);
@@ -200,6 +241,10 @@ public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 		clientLoanRepository.save(clientLoan2);
 		clientLoanRepository.save(clientLoan3);
 		clientLoanRepository.save(clientLoan4);
+
+		cardRepository.save(card1);
+		cardRepository.save(card2);
+		cardRepository.save(card3);
 
 	});
 }

@@ -1,6 +1,7 @@
 package com.ap.homebanking.dtos;
 
 import com.ap.homebanking.models.Account;
+import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.ClientLoan;
 
@@ -15,8 +16,8 @@ public class ClientDto {
     private String   lastName;
     private String    email;
     private Set<Account> accounts;
-
-    private Set<ClientLoan>clientLoans;
+    private Set<ClientLoan> clientLoans;
+    private Set<Card> cards;
 
     public ClientDto() {
     }
@@ -28,6 +29,7 @@ public class ClientDto {
         this.email = client.getEmail();
         this.accounts = client.getAccounts();
         this.clientLoans = client.getClientLoans();
+        this.cards = client.getCards();
     }
 
     public long getId() {
@@ -47,5 +49,8 @@ public class ClientDto {
     }
     public Set<ClientLoanDto> getLoans() {
         return clientLoans.stream().map(loan -> new ClientLoanDto(loan)).collect(toSet());
+    }
+    public Set<CardDto> getCards() {
+        return cards.stream().map(cards -> new CardDto(cards)).collect(toSet());
     }
 }
