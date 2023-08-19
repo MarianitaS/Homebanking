@@ -50,7 +50,7 @@ public class ClientLoan {
         this.payments = payments;
     }
 
-    @JsonIgnore
+
     public Client getClient() {
         return client;
     }
@@ -59,7 +59,7 @@ public class ClientLoan {
         this.client = client;
     }
 
-    @JsonIgnore
+
     public Loan getLoan() {
         return loan;
     }

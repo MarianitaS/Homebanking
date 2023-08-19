@@ -67,7 +67,7 @@ public class Transaction {
         this.date = date;
     }
 
-    @JsonIgnore
+
     public Account getAccount() {
         return account;
     }

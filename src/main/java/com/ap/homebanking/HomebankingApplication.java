@@ -2,10 +2,12 @@ package com.ap.homebanking;
 
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,9 +19,10 @@ public class HomebankingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
-
-@Bean
-public CommandLineRunner initData (ClientRepositiry clientRepositiry,
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	@Bean
+	public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 								   AccountRepository accountRepository,
 								   TransactionRepository transactionRepository,
 								   LoanRepository loanRepository,
@@ -29,12 +32,14 @@ public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 		Client client1 = new Client(
 				"Melba",
 				"Morel",
-				"melba@mindhub.com"
+				"melba@mindhub.com",
+				passwordEncoder.encode("melba")
 		);
 		Client client2 = new Client(
 				"Mariana",
 				"Soto",
-				"marianasolcito2012@gmail.com"
+				"marianasolcito2012@gmail.com",
+				passwordEncoder.encode("123456")
 		);
 
 		LocalDate today = LocalDate.now();
