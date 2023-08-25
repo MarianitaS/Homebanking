@@ -21,8 +21,6 @@ class WebAuthorization  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/admin/**")
-                .hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/clients")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/**")
