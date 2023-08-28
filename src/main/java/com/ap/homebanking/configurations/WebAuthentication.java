@@ -1,5 +1,6 @@
 package com.ap.homebanking.configurations;
 
+
 import com.ap.homebanking.dtos.ClientDto;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.ClientRepositiry;
@@ -30,7 +31,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(email-> {
-            ClientDto client = clientRepositiry.findByEmail(email);
+            Client client = clientRepositiry.findByEmail(email);
             if (client != null) {
                 return new User(client.getEmail(), client.getPassword(),
                         AuthorityUtils.createAuthorityList("CLIENT"));

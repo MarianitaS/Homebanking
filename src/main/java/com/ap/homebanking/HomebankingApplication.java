@@ -16,6 +16,9 @@ import java.util.List;
 @SpringBootApplication
 public class HomebankingApplication {
 
+	public int getRandomNumber(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
@@ -45,27 +48,29 @@ public class HomebankingApplication {
 		LocalDate today = LocalDate.now();
 		LocalDate tomorrow = today.plusDays(1);
 
+
+
 		Account account1 = new Account(
 
-				"VIN001",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				today,
 				5000
 		);
 		Account account2 = new Account(
 
-				"VIN002",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				tomorrow,
 				7500
 		);
 		Account account3 = new Account(
 
-				"VIN003",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				tomorrow,
 				20000
 		);
 		Account account4 = new Account(
 
-				"VIN004",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				today,
 				72500
 		);
@@ -160,24 +165,24 @@ public class HomebankingApplication {
 		Card card1 = new Card(
 				CardType.DEBIT,
 				CardColor.GOLD,
-				"5327-2870-5034-4325",
-				824,
+				getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999),
+				getRandomNumber(1, 999),
 				futuro,
 				anio0
 		);
 		Card card2 = new Card(
 				CardType.CREDIT,
 				CardColor.TITANIUM,
-				"4211-4571-0419-9871",
-				466,
+				getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999),
+				getRandomNumber(1, 999),
 				futuro,
 				anio0
 		);
 		Card card3 = new Card(
 				CardType.CREDIT,
 				CardColor.SILVER,
-				"4078-7990-4668-1504",
-				113,
+				getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999)+"-"+getRandomNumber(1111, 9999),
+				getRandomNumber(1, 999),
 				futuro,
 				anio0
 		);

@@ -1,7 +1,9 @@
 package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.ClientDto;
+import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepositiry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -21,6 +24,8 @@ public class ClientController {
 
     @Autowired
     private ClientRepositiry clientRepositiry;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @RequestMapping("/clients")
     public List<ClientDto> getClients(){
@@ -28,7 +33,9 @@ public class ClientController {
     }
     @RequestMapping("/clients/current")
     public ClientDto getCurrent(Authentication authentication) {
-        return clientRepositiry.findByEmail(authentication.getName());
+        Client client = clientRepositiry.findByEmail(authentication.getName());
+        ClientDto current = new ClientDto(client);
+        return current;
     }
 
     @RequestMapping("/clients/{id}")
@@ -49,10 +56,28 @@ public class ClientController {
         if (clientRepositiry.findByEmail(email) !=  null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
-        clientRepositiry.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+
+        Account account = new Account(
+                "VIN-" + getRandomNumber(11111111, 9999999),
+                LocalDate.now(),
+                0
+        );
+
+
+        clientRepositiry.save(new Client(firstName, lastName, email, passwordEncoder.encode(password))).addAccount(account);
+        accountRepository.save(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+
+
+
+    public int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
+
+
+
 
 
 }

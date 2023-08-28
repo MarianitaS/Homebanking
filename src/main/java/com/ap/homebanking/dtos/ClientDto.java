@@ -4,7 +4,7 @@ import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.ClientLoan;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import java.util.Set;
 
@@ -19,7 +19,7 @@ public class ClientDto {
     private Set<Account> accounts;
     private Set<ClientLoan> clientLoans;
     private Set<Card> cards;
-    private String password;
+
 
 
     public ClientDto() {
@@ -33,7 +33,7 @@ public class ClientDto {
         this.accounts = client.getAccounts();
         this.clientLoans = client.getClientLoans();
         this.cards = client.getCards();
-        this.password = client.getPassword();
+
 
     }
 
@@ -49,10 +49,8 @@ public class ClientDto {
     public String getEmail() {
         return email;
     }
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
+
+
     public Set<AccountDto> getAccounts() {
         return accounts.stream().map(account -> new AccountDto(account)).collect(toSet());
     }
@@ -60,7 +58,7 @@ public class ClientDto {
         return clientLoans.stream().map(loan -> new ClientLoanDto(loan)).collect(toSet());
     }
     public Set<CardDto> getCards() {
-        return cards.stream().map(cards -> new CardDto(cards)).collect(toSet());
+         return cards.stream().map(cards -> new CardDto(cards)).collect(toSet());
     }
 
 }

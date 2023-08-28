@@ -21,6 +21,7 @@ class WebAuthorization  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+
                 .antMatchers(HttpMethod.POST, "/api/clients")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/**")
@@ -34,27 +35,22 @@ class WebAuthorization  {
 
 
         // turn off checking for CSRF tokens
-
         http.csrf().disable();
 
         //disabling frameOptions so h2-console can be accessed
-
-        http.headers().frameOptions().disable();
+        http
+                .headers().frameOptions().disable();
 
         // if user is not authenticated, just send an authentication failure response
-
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
         // if login is successful, just clear the flags asking for authentication
-
         http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
 
         // if login fails, just send an authentication failure response
-
         http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
         // if logout is successful, just send a success response
-
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 
         return http.build();
