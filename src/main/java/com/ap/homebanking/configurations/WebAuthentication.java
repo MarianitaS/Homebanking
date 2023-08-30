@@ -1,6 +1,5 @@
 package com.ap.homebanking.configurations;
 
-
 import com.ap.homebanking.dtos.ClientDto;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.ClientRepositiry;
@@ -26,15 +25,19 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(email-> {
             Client client = clientRepositiry.findByEmail(email);
             if (client != null) {
-                return new User(client.getEmail(), client.getPassword(),
-                        AuthorityUtils.createAuthorityList("CLIENT"));
+                if (client.getEmail().equals("marianasolcito2012@gmail.com")){
+                    return new User(client.getEmail(), client.getPassword(),
+                            AuthorityUtils.createAuthorityList("CLIENT", "ADMIN"));
+                }else {
+                    return new User(client.getEmail(), client.getPassword(),
+                            AuthorityUtils.createAuthorityList("CLIENT"));
+                }
             } else {
                 throw new UsernameNotFoundException("Unknown user: " + email);
             }

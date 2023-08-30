@@ -18,7 +18,6 @@ public class CardDto {
     private LocalDate fromDate;
     private LocalDate thruDate;
 
-
     public CardDto() {
     }
 
@@ -63,8 +62,5 @@ public class CardDto {
         this.cvv = card.getCvv();
         this.fromDate = card.getFromDate();
         this.thruDate = card.getThruDate();
-
-
-
     }
 }

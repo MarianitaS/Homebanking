@@ -24,10 +24,16 @@ class WebAuthorization  {
 
                 .antMatchers(HttpMethod.POST, "/api/clients")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/**")
+
+                .antMatchers(HttpMethod.GET, "/api/clients/**")
                 .hasAuthority("CLIENT")
+
+                .antMatchers(HttpMethod.GET, "/api/accounts/**")
+                .hasAuthority("CLIENT")
+
                 .antMatchers(HttpMethod.POST, "/api/transactions")
                 .hasAuthority("CLIENT");
+
         http.formLogin()
                 .loginPage("/api/login")
                 .usernameParameter("email")
@@ -40,8 +46,7 @@ class WebAuthorization  {
         http.csrf().disable();
 
         //disabling frameOptions so h2-console can be accessed
-        http
-                .headers().frameOptions().disable();
+        http.headers().frameOptions().disable();
 
         // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
@@ -61,17 +66,8 @@ class WebAuthorization  {
     private void clearAuthenticationAttributes(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-
         if (session != null) {
-
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
         }
-
     }
-
-
-
-
-
 }

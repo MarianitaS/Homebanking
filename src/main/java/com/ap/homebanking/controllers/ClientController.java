@@ -26,6 +26,8 @@ public class ClientController {
     private ClientRepositiry clientRepositiry;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/clients")
     public List<ClientDto> getClients(){
@@ -34,17 +36,12 @@ public class ClientController {
     @RequestMapping("/clients/current")
     public ClientDto getCurrent(Authentication authentication) {
         Client client = clientRepositiry.findByEmail(authentication.getName());
-        ClientDto current = new ClientDto(client);
-        return current;
+        return new ClientDto(client);
     }
-
     @RequestMapping("/clients/{id}")
     public ClientDto getClient(@PathVariable Long id){
         return clientRepositiry.findById(id).map(client -> new ClientDto(client)).orElse(null);
     }
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
@@ -63,21 +60,12 @@ public class ClientController {
                 0
         );
 
-
         clientRepositiry.save(new Client(firstName, lastName, email, passwordEncoder.encode(password))).addAccount(account);
         accountRepository.save(account);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
-
-
-
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-
-
-
-
-
 }

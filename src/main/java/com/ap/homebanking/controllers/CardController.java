@@ -54,17 +54,11 @@ public class CardController {
             cardRepository.save(cardNew);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
-
-
     public Client getCurrent(Authentication authentication) {
         return clientRepositiry.findByEmail(authentication.getName());
     }
-
-
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-
 }

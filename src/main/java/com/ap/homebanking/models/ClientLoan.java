@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-
 @Entity
 public class ClientLoan {
     @Id
@@ -23,47 +22,34 @@ public class ClientLoan {
 
     public ClientLoan() {
     }
-
     public ClientLoan(double amount, int payments) {
         this.amount = amount;
         this.payments = payments;
-
     }
-
     public long getId() {
         return id;
     }
-
     public double getAmount() {
         return amount;
     }
-
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
     public int getPayments() {
         return payments;
     }
-
     public void setPayments(int payments) {
         this.payments = payments;
     }
-
-
     public Client getClient() {
         return client;
     }
-
     public void setClient(Client client) {
         this.client = client;
     }
-
-
     public Loan getLoan() {
         return loan;
     }
-
     public void setLoan(Loan loan) {
         this.loan = loan;
     }

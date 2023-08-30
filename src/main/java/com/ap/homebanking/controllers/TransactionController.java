@@ -1,6 +1,5 @@
 package com.ap.homebanking.controllers;
 
-
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Transaction;
@@ -40,11 +39,10 @@ public class TransactionController {
             @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber) {
 
         Client current = getCurrent(authentication);
-
         Set<Account> accAut = current.getAccounts();
 
-        Account accountOr = accountRepository.findByNumber(fromAccountNumber);
-        Account accDest = accountRepository.findByNumber(toAccountNumber);
+        Account accOri = accountRepository.findByNumber(fromAccountNumber);
+        Account accDes = accountRepository.findByNumber(toAccountNumber);
 
         if (description.isEmpty() || amount <=0 ){
             return new ResponseEntity<>("amount or description they are empty", HttpStatus.FORBIDDEN);
@@ -55,32 +53,28 @@ public class TransactionController {
         if (accAut == null){
             return new ResponseEntity<>("unauthenticated user", HttpStatus.FORBIDDEN);
         }
-        if (accDest == null) {
+        if (accDes == null) {
             return new ResponseEntity<>("the destination account does not exists", HttpStatus.FORBIDDEN);
         }
         if (accAut.stream().noneMatch(account -> account.getNumber().equals(fromAccountNumber))){
             return new ResponseEntity<>("the source account does not belongs to the authenticated client", HttpStatus.FORBIDDEN);
         }
-        if (accountOr.getBalance() < amount ){
+        if (accOri.getBalance() < amount ){
             return new ResponseEntity<>("has no funds", HttpStatus.FORBIDDEN);
         }
         if (Objects.equals(toAccountNumber, fromAccountNumber)) {
             return new ResponseEntity<>("the source account is same as destiny", HttpStatus.FORBIDDEN);
         }
 
-        double balanceOr = accountOr.getBalance();
-        double balanceDe = accDest.getBalance();
-
-        accountOr.setBalance((balanceOr-amount));
-        accDest.setBalance((balanceDe+amount));
+        accOri.setBalance((accOri.getBalance()-amount));
+        accDes.setBalance((accDes.getBalance()+amount));
 
         Transaction debit = new Transaction(
                 TransactionType.DEBIT,
-                amount,
+                -amount,
                 description,
                 LocalDateTime.now()
                 );
-
         Transaction credit = new Transaction(
                 TransactionType.CREDIT,
                 amount,
@@ -88,20 +82,17 @@ public class TransactionController {
                 LocalDateTime.now()
         );
 
-
-
-        accountOr.addTransactions(debit);
-        accDest.addTransactions(credit);
+        accOri.addTransactions(debit);
+        accDes.addTransactions(credit);
 
         transactionRepository.save(debit);
         transactionRepository.save(credit);
 
-        accountRepository.save(accountOr);
-        accountRepository.save(accDest);
+        accountRepository.save(accOri);
+        accountRepository.save(accDes);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
     public Client getCurrent(Authentication authentication) {
         return clientRepositiry.findByEmail(authentication.getName());

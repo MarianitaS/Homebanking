@@ -29,23 +29,19 @@ public class AccountController {
     public List<AccountDto> getAccounts(){
         return accountRepository.findAll().stream().map(account -> new AccountDto(account)).collect(toList());
     }
-
     @RequestMapping("/accounts/{id}")
     public AccountDto getAccount(@PathVariable Long id){
         return accountRepository.findById(id).map(account -> new AccountDto(account)).orElse(null);
     }
-
-  @RequestMapping("/clients/current/accounts")
+    @RequestMapping("/clients/current/accounts")
     public List<AccountDto> getCurrAcc(Authentication authentication) {
       Client client = clientRepositiry.findByEmail(authentication.getName());
       Set<Account> currAcc = client.getAccounts();
       List<AccountDto> accountDtos = currAcc.stream().map(account -> new AccountDto(account)).collect(toList());
           return accountDtos;
-  }
-
+    }
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> create(Authentication authentication) {
-
 
         Account account = new Account(
                 "VIN-" + getRandomNumber(11111111, 9999999),
@@ -55,17 +51,17 @@ public class AccountController {
 
         Client current = getCurrent(authentication);
         Set<Account> account2 = current.getAccounts();
+
         if( account2.size() > 2 )  {
             return new ResponseEntity<>("403 FORBIDDEN",HttpStatus.FORBIDDEN);
         } else {
+
             current.addAccount(account);
             accountRepository.save(account);
             return new ResponseEntity<>(HttpStatus.CREATED);
 
         }
-
     }
-
     public Client getCurrent(Authentication authentication) {
        return clientRepositiry.findByEmail(authentication.getName());
     }

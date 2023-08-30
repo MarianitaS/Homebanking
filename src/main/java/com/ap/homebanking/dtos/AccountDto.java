@@ -16,7 +16,6 @@ public class AccountDto {
     private double balance;
     private Set<Transaction> transactions;
 
-
     public AccountDto() {
     }
 
@@ -47,7 +46,4 @@ public class AccountDto {
     public Set<TransactionDto> getTransactions() {
         return transactions.stream().map(transaction -> new TransactionDto(transaction)).collect(toSet());
     }
-
-
-
 }
