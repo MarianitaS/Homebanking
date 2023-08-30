@@ -1,6 +1,5 @@
 package com.ap.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -61,7 +60,6 @@ public class Account {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
 
     public Client getClient() {
         return client;

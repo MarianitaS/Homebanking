@@ -1,12 +1,10 @@
 package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.AccountDto;
-import com.ap.homebanking.dtos.ClientDto;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepositiry;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +27,22 @@ public class AccountController {
     private ClientRepositiry clientRepositiry;
     @RequestMapping("/accounts")
     public List<AccountDto> getAccounts(){
-        return accountRepository.findAll().stream().map(AccountDto::new).collect(toList());
+        return accountRepository.findAll().stream().map(account -> new AccountDto(account)).collect(toList());
     }
+
     @RequestMapping("/accounts/{id}")
     public AccountDto getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).map(AccountDto::new).orElse(null);
+        return accountRepository.findById(id).map(account -> new AccountDto(account)).orElse(null);
     }
+
+  @RequestMapping("/clients/current/accounts")
+    public List<AccountDto> getCurrAcc(Authentication authentication) {
+      Client client = clientRepositiry.findByEmail(authentication.getName());
+      Set<Account> currAcc = client.getAccounts();
+      List<AccountDto> accountDtos = currAcc.stream().map(account -> new AccountDto(account)).collect(toList());
+          return accountDtos;
+  }
+
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> create(Authentication authentication) {
 
@@ -65,10 +73,4 @@ public class AccountController {
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-
-
-
-
-
-
 }

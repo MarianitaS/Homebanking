@@ -25,6 +25,8 @@ class WebAuthorization  {
                 .antMatchers(HttpMethod.POST, "/api/clients")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/**")
+                .hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/api/transactions")
                 .hasAuthority("CLIENT");
         http.formLogin()
                 .loginPage("/api/login")
