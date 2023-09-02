@@ -25,13 +25,21 @@ class WebAuthorization  {
                 .antMatchers(HttpMethod.POST, "/api/clients")
                 .permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/clients/**")
+                .antMatchers(HttpMethod.GET, "/api/clients/{id}", "api/clients/current",
+                                                         "api/accounts/{id}", "api/clients/current/accounts")
                 .hasAuthority("CLIENT")
 
-                .antMatchers(HttpMethod.GET, "/api/accounts/**")
+                .antMatchers(HttpMethod.GET, "api/loans")
                 .hasAuthority("CLIENT")
 
-                .antMatchers(HttpMethod.POST, "/api/transactions")
+                .antMatchers(HttpMethod.GET,"/api/clients", "/api/accounts",
+                                                       "/api/clients/", "/api/accounts/")
+                .hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts",
+                                                          "api/clients/current/cards",
+                                                          "/api/transactions",
+                                                          "api/loans")
                 .hasAuthority("CLIENT");
 
         http.formLogin()

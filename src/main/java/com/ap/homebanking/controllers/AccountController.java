@@ -3,8 +3,8 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.AccountDto;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepositiry;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +22,27 @@ import static java.util.stream.Collectors.toList;
 public class AccountController {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    private ClientRepositiry clientRepositiry;
+    private ClientService clientService;
+
     @RequestMapping("/accounts")
-    public List<AccountDto> getAccounts(){
-        return accountRepository.findAll().stream().map(account -> new AccountDto(account)).collect(toList());
+    public List<AccountDto> getAccountsDto(){
+        return accountService.getAccountsDto();
     }
     @RequestMapping("/accounts/{id}")
-    public AccountDto getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).map(account -> new AccountDto(account)).orElse(null);
+    public Object getAccount(@PathVariable Long id, Authentication authentication){
+
+        if (clientService.findByEmail(authentication.getName()).getAccounts().contains(accountService.findById(id)))
+        {
+            return accountService.getAccount(id);
+        }
+            return (HttpStatus.FORBIDDEN);
     }
     @RequestMapping("/clients/current/accounts")
     public List<AccountDto> getCurrAcc(Authentication authentication) {
-      Client client = clientRepositiry.findByEmail(authentication.getName());
-      Set<Account> currAcc = client.getAccounts();
+
+      Set<Account> currAcc = clientService.getCurrentAcc(authentication.getName());
       List<AccountDto> accountDtos = currAcc.stream().map(account -> new AccountDto(account)).collect(toList());
           return accountDtos;
     }
@@ -44,12 +50,12 @@ public class AccountController {
     public ResponseEntity<Object> create(Authentication authentication) {
 
         Account account = new Account(
-                "VIN-" + getRandomNumber(11111111, 9999999),
+                accountService.getRandomAccount(),
                 today,
                 0
         );
 
-        Client current = getCurrent(authentication);
+        Client current = clientService.findByEmail(authentication.getName());
         Set<Account> account2 = current.getAccounts();
 
         if( account2.size() > 2 )  {
@@ -57,16 +63,11 @@ public class AccountController {
         } else {
 
             current.addAccount(account);
-            accountRepository.save(account);
+            accountService.save(account);
             return new ResponseEntity<>(HttpStatus.CREATED);
 
         }
     }
-    public Client getCurrent(Authentication authentication) {
-       return clientRepositiry.findByEmail(authentication.getName());
-    }
     LocalDate today = LocalDate.now();
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
+
 }

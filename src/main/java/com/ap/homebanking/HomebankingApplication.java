@@ -52,13 +52,13 @@ public class HomebankingApplication {
 
 		Account account1 = new Account(
 
-				"VIN-"+getRandomNumber(11111111, 9999999),
+				"VIN-1",
 				today,
 				5000
 		);
 		Account account2 = new Account(
 
-				"VIN-"+getRandomNumber(11111111, 9999999),
+				"VIN-2",
 				tomorrow,
 				7500
 		);

@@ -3,8 +3,8 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.ClientDto;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepositiry;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,32 +15,32 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-
-import static java.util.stream.Collectors.toList;
-
 @RestController
 @RequestMapping("/api")
 public class ClientController {
 
     @Autowired
-    private ClientRepositiry clientRepositiry;
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/clients")
     public List<ClientDto> getClients(){
-        return clientRepositiry.findAll().stream().map(client -> new ClientDto(client)).collect(toList());
+        return clientService.getClientsDto();
     }
     @RequestMapping("/clients/current")
     public ClientDto getCurrent(Authentication authentication) {
-        Client client = clientRepositiry.findByEmail(authentication.getName());
-        return new ClientDto(client);
+        return clientService.getCurrent(authentication.getName());
     }
     @RequestMapping("/clients/{id}")
-    public ClientDto getClient(@PathVariable Long id){
-        return clientRepositiry.findById(id).map(client -> new ClientDto(client)).orElse(null);
+    public Object getClient(@PathVariable Long id, Authentication authentication){
+
+        if (clientService.findByEmail(authentication.getName()).equals(clientService.findById(id))) {
+            return clientService.getClient(id);
+        }
+        return HttpStatus.FORBIDDEN;
     }
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
@@ -50,22 +50,26 @@ public class ClientController {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-        if (clientRepositiry.findByEmail(email) !=  null) {
+        if (clientService.findByEmail(email) !=  null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
 
         Account account = new Account(
-                "VIN-" + getRandomNumber(11111111, 9999999),
+                accountService.getRandomAccount(),
                 LocalDate.now(),
                 0
         );
 
-        clientRepositiry.save(new Client(firstName, lastName, email, passwordEncoder.encode(password))).addAccount(account);
-        accountRepository.save(account);
+        Client client = new Client(
+                firstName,
+                lastName,
+                email,
+                passwordEncoder.encode(password));
+
+        clientService.save(client);
+        client.addAccount(account);
+        accountService.save(account);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
     }
 }

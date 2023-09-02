@@ -4,9 +4,9 @@ import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.models.TransactionType;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepositiry;
-import com.ap.homebanking.repositories.TransactionRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +26,11 @@ import java.util.Set;
 public class TransactionController {
 
     @Autowired
-    ClientRepositiry clientRepositiry;
+    private ClientService clientService;
     @Autowired
-    AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     @Transactional
     @RequestMapping(path = "/transactions", method = RequestMethod.POST)
@@ -38,11 +38,10 @@ public class TransactionController {
             @RequestParam double amount, @RequestParam String description,
             @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber) {
 
-        Client current = getCurrent(authentication);
-        Set<Account> accAut = current.getAccounts();
+        Set<Account> accAut = clientService.getCurrentAcc(authentication.getName());
 
-        Account accOri = accountRepository.findByNumber(fromAccountNumber);
-        Account accDes = accountRepository.findByNumber(toAccountNumber);
+        Account accOri = accountService.findByNumber(fromAccountNumber);
+        Account accDes = accountService.findByNumber(toAccountNumber);
 
         if (description.isEmpty() || amount <=0 ){
             return new ResponseEntity<>("amount or description they are empty", HttpStatus.FORBIDDEN);
@@ -85,16 +84,12 @@ public class TransactionController {
         accOri.addTransactions(debit);
         accDes.addTransactions(credit);
 
-        transactionRepository.save(debit);
-        transactionRepository.save(credit);
+        transactionService.save(debit);
+        transactionService.save(credit);
 
-        accountRepository.save(accOri);
-        accountRepository.save(accDes);
+        accountService.save(accOri);
+        accountService.save(accDes);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    public Client getCurrent(Authentication authentication) {
-        return clientRepositiry.findByEmail(authentication.getName());
     }
 }
