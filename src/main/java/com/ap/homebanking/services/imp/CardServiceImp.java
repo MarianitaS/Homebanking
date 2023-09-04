@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class CardServiceImp implements CardService {
 
     @Autowired
-    CardRepository cardRepository;
+    private CardRepository cardRepository;
 
     @Override
     public void save(Card card) {

@@ -23,7 +23,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 	@Autowired
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	@Bean
 	public CommandLineRunner initData (ClientRepositiry clientRepositiry,
 								   AccountRepository accountRepository,

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class TransactionServiceImp implements TransactionService {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository;
 
 
 

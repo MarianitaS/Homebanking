@@ -47,7 +47,6 @@ public class LoanController {
         if (loanApplicationDto.getAmount() <= 0 || loanApplicationDto.getloanId().toString().isBlank() ||
                 loanApplicationDto.getPayments() <=0 || loanApplicationDto.getToAccountNumber().isBlank()){
             return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
-
         }
         if (loanService.findById(loanApplicationDto.getloanId())==null){
             return new ResponseEntity<>("the loan does not exist",HttpStatus.FORBIDDEN);

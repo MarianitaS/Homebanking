@@ -1,8 +1,7 @@
 package com.ap.homebanking.configurations;
 
-import com.ap.homebanking.dtos.ClientDto;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.ClientRepositiry;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
-    ClientRepositiry clientRepositiry;
+    private ClientService clientService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -29,7 +28,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(email-> {
-            Client client = clientRepositiry.findByEmail(email);
+            Client client = clientService.findByEmail(email);
             if (client != null) {
                 if (client.getEmail().equals("marianasolcito2012@gmail.com")){
                     return new User(client.getEmail(), client.getPassword(),

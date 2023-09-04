@@ -26,7 +26,9 @@ public class CardController {
 
     @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
     public ResponseEntity<Object> register( Authentication authentication,
-    @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
+                                            @RequestParam CardType cardType,
+                                            @RequestParam CardColor cardColor) {
+
 
          Card cardNew = new Card(
                 cardType,
@@ -41,6 +43,8 @@ public class CardController {
         Set<Card> cards = current.getCards();
 
         long typeCards = cards.stream().filter(card -> card.getType() == cardType).count();
+
+
 
         if (typeCards > 2) {
             return new ResponseEntity<>("403 FORBIDDEN",HttpStatus.FORBIDDEN);
