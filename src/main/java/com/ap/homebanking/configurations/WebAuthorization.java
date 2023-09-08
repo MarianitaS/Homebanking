@@ -40,7 +40,10 @@ class WebAuthorization  {
                                                           "/api/clients/current/cards",
                                                           "/api/transactions",
                                                           "/api/loans")
-                .hasAuthority("CLIENT");
+                .hasAuthority("CLIENT")
+
+                .antMatchers("/api/clients")
+                .denyAll();
 
         http.formLogin()
                 .loginPage("/api/login")

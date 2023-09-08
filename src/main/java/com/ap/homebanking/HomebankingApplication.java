@@ -2,6 +2,7 @@ package com.ap.homebanking;
 
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.*;
+import com.ap.homebanking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,14 +26,14 @@ public class HomebankingApplication {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Bean
-	public CommandLineRunner initData (ClientRepositiry clientRepositiry,
-								   AccountRepository accountRepository,
-								   TransactionRepository transactionRepository,
-								   LoanRepository loanRepository,
-								   ClientLoanRepository clientLoanRepository,
-								   CardRepository cardRepository){
+	public CommandLineRunner initData (ClientService clientService,
+									   AccountService accountService,
+									   TransactionService transactionService,
+									   LoanService loanService,
+									   ClientLoanService clientLoanService,
+									   CardService cardService){
 	return( args -> {
-		Client client1 = new Client(
+		/*Client client1 = new Client(
 				"Melba",
 				"Morel",
 				"melba@mindhub.com",
@@ -48,81 +49,67 @@ public class HomebankingApplication {
 		LocalDate today = LocalDate.now();
 		LocalDate tomorrow = today.plusDays(1);
 
-
-
 		Account account1 = new Account(
-
-				"VIN-1",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				today,
 				5000
 		);
 		Account account2 = new Account(
-
-				"VIN-2",
+				"VIN-"+getRandomNumber(11111111, 9999999),
 				tomorrow,
 				7500
 		);
 		Account account3 = new Account(
-
 				"VIN-"+getRandomNumber(11111111, 9999999),
 				tomorrow,
 				20000
 		);
 		Account account4 = new Account(
-
 				"VIN-"+getRandomNumber(11111111, 9999999),
 				today,
 				72500
 		);
-
 		Transaction transaction1 = new Transaction(
 				TransactionType.DEBIT,
 				-2500,
 				"Supermercado",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction2 = new Transaction(
 				TransactionType.CREDIT,
 				2500,
 				"Transferencia de Mama",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction3 = new Transaction(
 				TransactionType.DEBIT,
 				-500,
 				"Farmacia",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction4 = new Transaction(
 				TransactionType.CREDIT,
 				125000,
 				"Sueldo",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction5 = new Transaction(
 				TransactionType.DEBIT,
 				-35500,
 				"Tarjeta de credito",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction6 = new Transaction(
 				TransactionType.CREDIT,
 				65000,
 				"Aguinaldo",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction7 = new Transaction(
 				TransactionType.DEBIT,
 				-7500,
 				"Libreria",
 				LocalDateTime.now()
-
 		);
 		Transaction transaction8 = new Transaction(
 				TransactionType.CREDIT,
@@ -187,24 +174,15 @@ public class HomebankingApplication {
 				anio0
 		);
 
-
-
-
-
 		loan1.addClientLoans(clientLoan1);
 		loan2.addClientLoans(clientLoan2);
 		loan2.addClientLoans(clientLoan3);
 		loan3.addClientLoans(clientLoan4);
 
-
 		client1.addClientLoans(clientLoan1);
 		client1.addClientLoans(clientLoan2);
 		client2.addClientLoans(clientLoan3);
 		client2.addClientLoans(clientLoan4);
-
-
-
-
 
 		account1.addTransactions(transaction1);
 		account1.addTransactions(transaction2);
@@ -215,7 +193,6 @@ public class HomebankingApplication {
 		account4.addTransactions(transaction7);
 		account4.addTransactions(transaction8);
 
-
 		client1.addAccount(account1);
 		client1.addAccount(account2);
 		client2.addAccount(account3);
@@ -225,36 +202,35 @@ public class HomebankingApplication {
 		client1.addCards(card2);
 		client2.addCards(card3);
 
+		clientService.save(client1);
+		clientService.save(client2);
 
-		clientRepositiry.save(client1);
-		clientRepositiry.save(client2);
+		accountService.save(account1);
+		accountService.save(account2);
+		accountService.save(account3);
+		accountService.save(account4);
 
-		accountRepository.save(account1);
-		accountRepository.save(account2);
-		accountRepository.save(account3);
-		accountRepository.save(account4);
+		transactionService.save(transaction1);
+		transactionService.save(transaction2);
+		transactionService.save(transaction3);
+		transactionService.save(transaction4);
+		transactionService.save(transaction5);
+		transactionService.save(transaction6);
+		transactionService.save(transaction7);
+		transactionService.save(transaction8);
 
-		transactionRepository.save(transaction1);
-		transactionRepository.save(transaction2);
-		transactionRepository.save(transaction3);
-		transactionRepository.save(transaction4);
-		transactionRepository.save(transaction5);
-		transactionRepository.save(transaction6);
-		transactionRepository.save(transaction7);
-		transactionRepository.save(transaction8);
+		loanService.save(loan1);
+		loanService.save(loan2);
+		loanService.save(loan3);
 
-		loanRepository.save(loan1);
-		loanRepository.save(loan2);
-		loanRepository.save(loan3);
+		clientLoanService.save(clientLoan1);
+		clientLoanService.save(clientLoan2);
+		clientLoanService.save(clientLoan3);
+		clientLoanService.save(clientLoan4);
 
-		clientLoanRepository.save(clientLoan1);
-		clientLoanRepository.save(clientLoan2);
-		clientLoanRepository.save(clientLoan3);
-		clientLoanRepository.save(clientLoan4);
-
-		cardRepository.save(card1);
-		cardRepository.save(card2);
-		cardRepository.save(card3);
+		cardService.save(card1);
+		cardService.save(card2);
+		cardService.save(card3);*/
 
 	});
 }
