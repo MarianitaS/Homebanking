@@ -26,11 +26,11 @@ public class AccountController {
     @Autowired
     private ClientService clientService;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDto> getAccountsDto(){
         return accountService.getAccountsDto();
     }
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public Object getAccount(@PathVariable Long id, Authentication authentication){
 
         if (clientService.findByEmail(authentication.getName()).getAccounts().contains(accountService.findById(id)))
@@ -39,14 +39,14 @@ public class AccountController {
         }
             return (HttpStatus.FORBIDDEN);
     }
-    @RequestMapping("/clients/current/accounts")
+    @GetMapping("/clients/current/accounts")
     public List<AccountDto> getCurrAcc(Authentication authentication) {
 
       Set<Account> currAcc = clientService.getCurrentAcc(authentication.getName());
       List<AccountDto> accountDtos = currAcc.stream().map(account -> new AccountDto(account)).collect(toList());
           return accountDtos;
     }
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/current/accounts")
     public ResponseEntity<Object> create(Authentication authentication) {
 
         Account account = new Account(
@@ -71,3 +71,4 @@ public class AccountController {
     LocalDate today = LocalDate.now();
 
 }
+

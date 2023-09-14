@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -34,27 +31,32 @@ public class LoanController {
     private AccountService accountService;
 
 
-    @RequestMapping("/loans")
+    @GetMapping("/loans")
     public List<LoanDto> getLoans(){
         return loanService.getLoansDto();
     }
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping(path = "/loans")
     public ResponseEntity<String> addLoan (@RequestBody LoanApplicationDto loanApplicationDto, Authentication authentication) {
 
         Set<Account> currAcc = clientService.getCurrentAcc(authentication.getName());
 
+        Loan loan = loanService.findById(loanApplicationDto.getloanId());
+
+        if (loanApplicationDto == null){
+            return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
+        }
         if (loanApplicationDto.getAmount() <= 0 || loanApplicationDto.getloanId().toString().isBlank() ||
                 loanApplicationDto.getPayments() <=0 || loanApplicationDto.getToAccountNumber().isBlank()){
             return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
         }
-        if (loanService.findById(loanApplicationDto.getloanId())==null){
+        if (loan ==null){
             return new ResponseEntity<>("the loan does not exist",HttpStatus.FORBIDDEN);
         }
-        if (loanApplicationDto.getAmount()>loanService.findById(loanApplicationDto.getloanId()).getMaxAmount()){
+        if (loanApplicationDto.getAmount()>loan.getMaxAmount()){
             return new ResponseEntity<>("the amount exceeds the maximum available",HttpStatus.FORBIDDEN);
         }
-        if (!loanService.findById(loanApplicationDto.getloanId()).getPayments().contains(loanApplicationDto.getPayments())) {
+        if (!loan.getPayments().contains(loanApplicationDto.getPayments())) {
             return new ResponseEntity<>("the payments do not correspond to the loan",HttpStatus.FORBIDDEN);
         }
         if (accountService.findByNumber(loanApplicationDto.getToAccountNumber()) == null){
@@ -68,7 +70,6 @@ public class LoanController {
 
         Client current = clientService.findByEmail(authentication.getName());
         Account accLoan = accountService.findByNumber(loanApplicationDto.getToAccountNumber());
-        Loan loan = loanService.findById(loanApplicationDto.getloanId());
 
         Set<Account> accounts = current.getAccounts();
 

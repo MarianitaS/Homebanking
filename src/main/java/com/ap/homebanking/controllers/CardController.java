@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -24,13 +21,12 @@ public class CardController {
     @Autowired
     private ClientService clientService;
 
-    @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
+
+    @PostMapping(path = "/clients/current/cards")
     public ResponseEntity<Object> register( Authentication authentication,
                                             @RequestParam CardType cardType,
                                             @RequestParam CardColor cardColor) {
-
-
-         Card cardNew = new Card(
+             Card cardNew = new Card(
                 cardType,
                 cardColor,
                 cardService.getRandomCardNumber(),
@@ -55,5 +51,7 @@ public class CardController {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+
 
 }

@@ -26,15 +26,15 @@ public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping("/clients")
+    @GetMapping("/clients")
     public List<ClientDto> getClients(){
         return clientService.getClientsDto();
     }
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDto getCurrent(Authentication authentication) {
         return clientService.getCurrent(authentication.getName());
     }
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public Object getClient(@PathVariable Long id, Authentication authentication){
 
         if (clientService.findByEmail(authentication.getName()).equals(clientService.findById(id))) {
@@ -42,7 +42,7 @@ public class ClientController {
         }
         return HttpStatus.FORBIDDEN;
     }
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping(path = "/clients")
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {

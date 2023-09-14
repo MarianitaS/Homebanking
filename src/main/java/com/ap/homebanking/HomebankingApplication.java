@@ -17,22 +17,23 @@ import java.util.List;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	public int getRandomNumber(int min, int max) {
-		return (int) ((Math.random() * (max - min)) + min);
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@Bean
-	public CommandLineRunner initData (ClientService clientService,
-									   AccountService accountService,
-									   TransactionService transactionService,
-									   LoanService loanService,
-									   ClientLoanService clientLoanService,
-									   CardService cardService){
-	return( args -> {
+
+
+
+
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+//	@Bean
+//	public CommandLineRunner initData (ClientService clientService,
+//									   AccountService accountService,
+//									   TransactionService transactionService,
+//									   LoanService loanService,
+//									   ClientLoanService clientLoanService,
+//									   CardService cardService){
+//	return( args -> {
 		/*Client client1 = new Client(
 				"Melba",
 				"Morel",
@@ -232,6 +233,6 @@ public class HomebankingApplication {
 		cardService.save(card2);
 		cardService.save(card3);*/
 
-	});
-}
+//	});
+//}
 }
